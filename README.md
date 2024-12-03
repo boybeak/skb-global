@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.github.boybeak:skb-global:Tag'
 }
 ```
+The newest version is: ![version](https://jitpack.io/v/boybeak/skb-global.svg)
 
 # Usage
 You can use it **globally** or **locally**.
