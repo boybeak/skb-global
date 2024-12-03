@@ -43,13 +43,18 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-//            from(components["release"]) // Android 发布组件
-            groupId = "com.github.boybeak"
-            artifactId = "skb-global"
-            version = "1.0.0"
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.boybeak"
+                artifactId = "skb-global"
+                version = "0.0.4"
+
+//                artifact("${layout.buildDirectory}/outputs/aar/${project.name}-release.aar")
+            }
         }
     }
 }
+
