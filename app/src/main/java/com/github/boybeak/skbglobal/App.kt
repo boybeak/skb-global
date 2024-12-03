@@ -20,6 +20,10 @@ class App : Application() {
             override fun onClose() {
                 Log.d(TAG, "onClose")
             }
+
+            override fun onHeightChanged(height: Int) {
+                Log.d(TAG, "onHeightChanged height=$height")
+            }
         })
     }
 }

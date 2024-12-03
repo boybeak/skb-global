@@ -99,6 +99,10 @@ class KeyboardObserver private constructor(activity: Activity, private val showD
 
     private val callbacks = LinkedList<Callback>()
 
+    val isWatching: Boolean get() {
+        return cursorPopWin.isShowing
+    }
+
     fun watch() {
         if (!cursorPopWin.isShowing) {
             cursorPopWin.showAtLocation(decorView, Gravity.BOTTOM or Gravity.END, 0, 0)

@@ -3,6 +3,7 @@ package com.github.boybeak.skbglobal
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -10,6 +11,10 @@ class MainActivity : AppCompatActivity() {
 
     private val observer by lazy {
         KeyboardObserver.create(this, true)
+    }
+
+    private val switchBtn: SwitchCompat by lazy {
+        findViewById(R.id.switchBtn)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,16 +26,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-//        observer.watch()
-    }
-
-    override fun onPause() {
-        super.onPause()
-//        observer.unwatch()
+        switchBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                observer.watch()
+            } else {
+                observer.unwatch()
+            }
+        }
     }
 
 }
