@@ -15,9 +15,16 @@ import java.lang.ref.WeakReference
 import java.util.LinkedList
 import kotlin.math.max
 
-class KeyboardObserver private constructor(activity: Activity, private val showDebug: Boolean = false) {
+class KeyboardObserver private constructor(
+    activity: Activity,
+    private val showDebug: Boolean = false
+) {
 
     companion object {
+        /**
+         * @param activity activity that you want to watch.
+         * @param showDebug true if you want to show debug UI indicator.
+         */
         fun create(activity: Activity, showDebug: Boolean = false): KeyboardObserver {
             return KeyboardObserver(activity, showDebug)
         }
@@ -44,6 +51,17 @@ class KeyboardObserver private constructor(activity: Activity, private val showD
 
         private var lastKeyboardHeight = 0
 
+        private fun notifyHeightChanged(keyboardHeight: Int) {
+            if (callbacks.isNotEmpty()) {
+                val cbs = ArrayList<Callback>(callbacks)
+                cbs.forEach {
+                    it.onKeyboardHeightChanged(keyboardHeight)
+                }
+                cbs.clear()
+            }
+            lastKeyboardHeight = keyboardHeight
+        }
+
         override fun onLayoutChange(
             v: View?,
             left: Int,
@@ -56,20 +74,37 @@ class KeyboardObserver private constructor(activity: Activity, private val showD
             oldBottom: Int
         ) {
             rulerPopWin.contentView.removeOnLayoutChangeListener(this)
+
+            val oldIsWatching = isWatching
+            if (!isWatching) {
+                isWatching = true
+            }
+
             rulerPopWin.contentView.getGlobalVisibleRect(rulerRect)
             cursorPopWin.contentView.getGlobalVisibleRect(cursorRect)
 
             val keyboardHeight = rulerRect.bottom - cursorRect.bottom
 
-            if (keyboardHeight != lastKeyboardHeight) {
-                if (callbacks.isNotEmpty()) {
-                    val cbs = ArrayList<Callback>(callbacks)
-                    cbs.forEach {
-                        it.onKeyboardHeightChanged(keyboardHeight)
+            if (notifyOnceWatch) {
+                if (oldIsWatching) {
+                    if (keyboardHeight != lastKeyboardHeight) {
+                        notifyHeightChanged(keyboardHeight)
                     }
-                    cbs.clear()
+                } else {
+                    notifyHeightChanged(keyboardHeight)
                 }
-                lastKeyboardHeight = keyboardHeight
+            } else {
+                if (oldIsWatching) {
+                    if (keyboardHeight != lastKeyboardHeight) {
+                        notifyHeightChanged(keyboardHeight)
+                    }
+                } else {
+                    lastKeyboardHeight = keyboardHeight
+                }
+            }
+
+            if (keyboardHeight != lastKeyboardHeight) {
+                notifyHeightChanged(keyboardHeight)
             }
 
             if (showDebug) {
@@ -99,11 +134,16 @@ class KeyboardObserver private constructor(activity: Activity, private val showD
 
     private val callbacks = LinkedList<Callback>()
 
-    val isWatching: Boolean get() {
-        return cursorPopWin.isShowing
-    }
+    var isWatching: Boolean = false
+        private set
 
-    fun watch() {
+    private var notifyOnceWatch: Boolean = false
+
+    /**
+     * @param notifyNow true if you want an onKeyboardHeightChanged event after calling watch.
+     */
+    fun watch(notifyNow: Boolean = false) {
+        notifyOnceWatch = notifyNow
         if (!cursorPopWin.isShowing) {
             cursorPopWin.showAtLocation(decorView, Gravity.BOTTOM or Gravity.END, 0, 0)
             cursorPopWin.contentView.addOnLayoutChangeListener(cursorLayoutChangeListener)
@@ -119,6 +159,8 @@ class KeyboardObserver private constructor(activity: Activity, private val showD
         if (rulerPopWin.isShowing) {
             rulerPopWin.dismiss()
         }
+        notifyOnceWatch = false
+        isWatching = false
     }
 
     fun addCallback(callback: Callback) {

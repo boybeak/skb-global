@@ -37,7 +37,7 @@ internal class ObserverManager : ActivityLifecycleCallbacks {
                 oldBottom: Int
             ) {
                 v?.removeOnLayoutChangeListener(this)
-                observersMap[activity]?.watch()
+                observersMap[activity]?.watch(false)
             }
         })
     }
@@ -46,11 +46,9 @@ internal class ObserverManager : ActivityLifecycleCallbacks {
         observersMap[activity]?.unwatch()
     }
 
-    override fun onActivityStopped(activity: Activity) {
-    }
+    override fun onActivityStopped(activity: Activity) {}
 
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-    }
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
     override fun onActivityDestroyed(activity: Activity) {
         val observer = observersMap.remove(activity)

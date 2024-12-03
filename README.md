@@ -2,6 +2,11 @@
 
 May be the best solution for Android soft keyboard listening。
 
+<video width="320" controls autoplay>
+  <source src="/arts/skb-global.webm" type="video/webm">
+  您的浏览器不支持 video 标签。
+</video>
+
 ## Installation
 
 Add **jitpack** to your `settings.gradle.kts`.
