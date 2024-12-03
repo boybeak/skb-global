@@ -22,9 +22,9 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-#jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-#android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
-android-library = { id = "com.android.library", version = "8.1.1" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.22" }
+#android-library = { id = "com.android.library", version = "8.1.1" }
+#jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.22" }
 
