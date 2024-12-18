@@ -3,7 +3,7 @@ package com.github.boybeak.skbglobal
 import android.app.Application
 import java.util.LinkedList
 
-object SoftKeyboardGlobal : KeyboardObserver.Callback {
+object SoftKeyboardGlobal : IKeyboardObserver.Callback {
 
     private var isInstalled = false
     var isDebug: Boolean = false

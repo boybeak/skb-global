@@ -5,7 +5,6 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnLayoutChangeListener
-import com.github.boybeak.skbglobal.KeyboardObserver.Companion.create
 import java.util.WeakHashMap
 
 internal class ObserverManager : ActivityLifecycleCallbacks {
@@ -15,7 +14,7 @@ internal class ObserverManager : ActivityLifecycleCallbacks {
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        val observer = create(activity, SoftKeyboardGlobal.isDebug)
+        val observer = KeyboardObserver.create(activity, SoftKeyboardGlobal.isDebug)
         observer.addCallback(SoftKeyboardGlobal)
         observersMap[activity] = observer
     }
@@ -37,7 +36,7 @@ internal class ObserverManager : ActivityLifecycleCallbacks {
                 oldBottom: Int
             ) {
                 v?.removeOnLayoutChangeListener(this)
-                observersMap[activity]?.watch(false)
+                observersMap[activity]?.watch()
             }
         })
     }
