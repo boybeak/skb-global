@@ -84,3 +84,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 You can pass `true` to second parameter when creating a `KeyboardObserver` to display a debug UI indicator.
+
+## Q&A
+### 1. Landscape problem
+The `EditText`'s default behavior for landscape is **ExtractUi**.
+
+![landscape](./arts/landscape.png)
+
+You need add `android:imeOptions="flagNoExtractUi"` to your `EditText` in xml or use `editText.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI` in program.
